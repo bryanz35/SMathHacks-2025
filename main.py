@@ -13,7 +13,6 @@ mu = -7.94e22 * np.array(
 R0dip = np.array([0.0, 0.0, 0.0])  # Dipole moment location
 M0 = 1.0e-7  # mu0/4pi
 
-
 # ====== Def. magnetic field at point r ======
 def B(R, R0, mu):
     r = np.array([R[0] - R0[0], R[1] - R0[1], R[2] - R0[2]]) * RT
