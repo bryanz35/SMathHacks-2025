@@ -73,7 +73,7 @@ for i in range(1, Nsteps):
     rp[i] = rp[i - 1, :] + (dt / 6.0) * (vp1 + 2 * vp2 + 2 * vp3 + vp4)
     vp[i] = vp[i - 1, :] + (dt / 6.0) * (ap1 + 2 * ap2 + 2 * ap3 + ap4)
     t[i] = dt * i
-
+print(rp)
 def x(initial_pos, vel_arr, time_arr):
     dists = [initial_pos]
     for i in range(len(time_arr.tolist())):
@@ -82,11 +82,14 @@ def x(initial_pos, vel_arr, time_arr):
     return dists
 
 pos = x([init_pos], vp, t)
+px = [r[0] for r in rp]
+py = [r[0] for r in rp]
+pz = [r[0] for r in rp]
 pos = np.array([pos])
 x_vals = [p[0][0] for p in pos[0]]
 y_vals = [p[0][1] for p in pos[0]]
 z_vals = [p[0][2] for p in pos[0]]
 fig = plt.figure()
 ax = plt.axes(projection="3d")
-ax.plot(x_vals, y_vals, z_vals)
+ax.plot(px, py, pz, label='Orbit')
 plt.show()
