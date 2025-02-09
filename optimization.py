@@ -23,13 +23,6 @@ def total_radiation(a, e, i, num_points=1000):
 
     return radexposure
 
-def compute_perigee_apogee_velocity(a, e):
-    r_p = a * (1 - e)
-    r_a = a * (1 + e)
-    v_p = np.sqrt(MU * (2/r_p - 1/a))
-    v_a = np.sqrt(MU * (2/r_a - 1/a))
-    return (v_p, v_a)
-
 a_min = float(input("Enter minimum value for semi-major axis (a) in meters: "))
 a_max = float(input("Enter maximum value for semi-major axis (a) in meters: "))
 e_min = float(input("Enter minimum value for eccentricity (e): "))
