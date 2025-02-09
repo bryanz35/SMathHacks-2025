@@ -42,8 +42,8 @@ t = np.zeros(Nsteps)
 rp = np.zeros((len(t), 3))
 vp = np.zeros((len(t), 3))
 
-m = 4.0 * m_p
-q = 2.0 * qe
+m = m_e
+q = -qe
 
 # ====== Define initial conditions ======
 init_pos = [5.0, 4.0, 3.0]
