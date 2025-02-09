@@ -82,10 +82,11 @@ def x(initial_pos, vel_arr, time_arr):
     return dists
 
 pos = x([init_pos], vp, t)
-pos = np.array([np.array(i) for i in pos])
+pos = np.array([pos])
+x_vals = [p[0][0] for p in pos[0]]
+y_vals = [p[0][1] for p in pos[0]]
+z_vals = [p[0][2] for p in pos[0]]
 fig = plt.figure()
 ax = plt.axes(projection="3d")
-ax.plot(pos[0][:, 0], pos[0][:, 1], pos[0][:, 2])
+ax.plot(x_vals, y_vals, z_vals)
 plt.show()
-
-
