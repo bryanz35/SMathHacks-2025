@@ -75,16 +75,17 @@ for i in range(1, Nsteps):
     t[i] = dt * i
 
 def x(initial_pos, vel_arr, time_arr):
-    dists = initial_pos
+    dists = [initial_pos]
     for i in range(len(time_arr.tolist())):
         spec_vel = vel_arr[i]
-        np.append(dists, np.squeeze(np.array([spec_vel + dists[-1]])), axis=1)
+        dists.append(np.array(spec_vel + dists[-1]))
     return dists
 
 pos = x([init_pos], vp, t)
+pos = np.array([np.array(i) for i in pos])
 fig = plt.figure()
 ax = plt.axes(projection="3d")
-ax.plot(pos[:, 0], pos[:, 1], pos[:, 2])
+ax.plot(pos[0][:, 0], pos[0][:, 1], pos[0][:, 2])
 plt.show()
 
 
