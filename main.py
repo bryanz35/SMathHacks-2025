@@ -78,7 +78,7 @@ def x(initial_pos, vel_arr, time_arr):
     dists = initial_pos
     for i in range(len(time_arr.tolist())):
         spec_vel = vel_arr[i]
-        np.append(dists, np.squeeze(np.array([spec_vel + dists[-1]]), axis=1)
+        np.append(dists, np.squeeze(np.array([spec_vel + dists[-1]])), axis=1)
     return dists
 
 pos = x([init_pos], vp, t)
