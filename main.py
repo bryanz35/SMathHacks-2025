@@ -1,6 +1,10 @@
-import numpy as np
+"""
+TODO: Plot solutions (position, time, velocity...)
+"""
 
-# ====== Def. key constants ======
+import numpy as np
+import matplotlib.pyplot as plt 
+
 RT = 6371000.0  # Earth radius [m]
 m_p = 1.67E-27  # mass of proton [kg]
 m_e = 9.109E-31  # mass of electron [kg]
@@ -11,31 +15,42 @@ mu = -7.94e22 * np.array([0.0, np.sin(phi), np.cos(phi)])  # Earth’s magnetic 
 R0dip = np.array([0.0, 0.0, 0.0])  # Dipole moment location
 M0 = 1.0E-7  # mu0 / 4 pi
 
-# ====== Def. magnetic field at point r ======
+# TODO: Update B to use IGRF model
 def B(R, R0, mu):
     r = np.array([R[0] - R0[0], R[1] - R0[1], R[2] - R0[2]]) * RT
     rmag = np.sqrt(r[0]**2 + r[1]**2 + r[2]**2)
     Bfield = M0 * (3.0 * r * np.dot(mu, r) / (rmag**5) - mu / (rmag**3))
     return Bfield
 
-# ====== Setup time steps ======
-dt = 0.0001
+
+'''def B(R, R0, mu):
+    V = 0
+    sum1 = 0
+    for n in range(1, N):
+        sum2 = 0
+        for m in range(0, n):
+            ans = (a/r) ** (n+1)
+            sum2 += ans
+        sum1 += sum2
+    return sum1'''
+
+dt = 0.1
 tf = 5000.0
 Nsteps = int(tf / dt)
 
-# ====== Vector initialization ======
 t = np.zeros(Nsteps)
 rp = np.zeros((len(t), 3))
 vp = np.zeros((len(t), 3))
 
-# ====== Setup a charged particle ======
 m = 4.0 * m_p
 q = 2.0 * qe
 
 # ====== Define initial conditions ======
+init_pos = [5.0, 4.0, 3.0]
+init_vel = [1.0, 2.0, 3.0]
 t[0] = 0.0
-rp[0, :] = np.array([5.0, 5.0, 5.0])
-vp[0, :] = np.array([1.0, 1.0, 1.0])
+rp[0, :] = np.array(init_pos)
+vp[0, :] = np.array(init_vel)
 
 # ====== RK4 implementation ======
 for i in range(1, Nsteps):
@@ -59,7 +74,17 @@ for i in range(1, Nsteps):
     vp[i] = vp[i - 1, :] + (dt / 6.0) * (ap1 + 2 * ap2 + 2 * ap3 + ap4)
     t[i] = dt * i
 
-# Print outputs
-print(t)
-print(rp)
-print(vp)
+def x(initial_pos, vel_arr, time_arr):
+    dists = initial_pos
+    for i in range(len(time_arr.tolist())):
+        spec_vel = vel_arr[i]
+        np.append(dists, np.squeeze(np.array([spec_vel + dists[-1]]), axis=1)
+    return dists
+
+pos = x([init_pos], vp, t)
+fig = plt.figure()
+ax = plt.axes(projection="3d")
+ax.plot(pos[:, 0], pos[:, 1], pos[:, 2])
+plt.show()
+
+
