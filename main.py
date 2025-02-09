@@ -19,7 +19,7 @@ def B(R, R0, mu):
     return Bfield
 
 # ====== Setup time steps ======
-dt = 0.0001
+dt = 0.1
 tf = 5000.0
 Nsteps = int(tf / dt)
 
