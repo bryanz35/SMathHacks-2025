@@ -1,8 +1,11 @@
+"""
+TODO: Plot solutions (position, time, velocity...)
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt 
+from matplotlib.animation import FuncAnimation
 
-# Constants
 RT = 6371000.0  # Earth radius [m]
 m_p = 1.67E-27  # mass of proton [kg]
 m_e = 9.109E-31  # mass of electron [kg]
@@ -13,7 +16,6 @@ mu = -7.94e22 * np.array([0.0, np.sin(phi), np.cos(phi)])  # Earth’s magnetic 
 R0dip = np.array([0.0, 0.0, 0.0])  # Dipole moment location
 M0 = 1.0E-7  # mu0 / 4 pi
 
-# return magnetic field at a given position
 def B(R, R0, mu):
     r = np.array([R[0] - R0[0], R[1] - R0[1], R[2] - R0[2]]) * RT
     rmag = np.sqrt(r[0]**2 + r[1]**2 + r[2]**2)
@@ -31,23 +33,21 @@ def B(R, R0, mu):
             sum2 += ans
         sum1 += sum2
     return sum1'''
-# step size and final time
+
 dt = 0.1
-tf = 500.0
+tf = 1000.0
 Nsteps = int(tf / dt)
 
-# time, position, and velocity 
 t = np.zeros(Nsteps)
 rp = np.zeros((len(t), 3))
 vp = np.zeros((len(t), 3))
 
-# alpha particle
-m =  m_e
-q = -qe
+m = 4.0 * m_p
+q = 2.0 * qe
 
-# initial pos, vel
-init_pos = [1, 2, 3]
-init_vel = [0.5, -0.4, 0.3]
+# ====== Define initial conditions ======
+init_pos = [5, 4, 3.0]
+init_vel = [1, 2, 3]
 t[0] = 0.0
 rp[0, :] = np.array(init_pos)
 vp[0, :] = np.array(init_vel)
@@ -73,24 +73,47 @@ for i in range(1, Nsteps):
     rp[i] = rp[i - 1, :] + (dt / 6.0) * (vp1 + 2 * vp2 + 2 * vp3 + vp4)
     vp[i] = vp[i - 1, :] + (dt / 6.0) * (ap1 + 2 * ap2 + 2 * ap3 + ap4)
     t[i] = dt * i
-
+    
 x = rp[:, 0]
 y = rp[:, 1]
 z = rp[:, 2]
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-sx = np.split(x, 5)
+'''sx = np.split(x, 5)
 sy = np.split(y, 5)
 sz = np.split(z, 5)
 ax.plot(sx[0], sy[0], sz[0], color='blue')
 ax.plot(sx[1], sy[1], sz[1], color='slateblue')
 ax.plot(sx[2], sy[2], sz[2], color='mediumslateblue')
 ax.plot(sx[3], sy[3], sz[3], color='darkslateblue')
-ax.plot(sx[4], sy[4], sz[4], color='indigo')
+ax.plot(sx[4], sy[4], sz[4], color='indigo')'''
+# Initialize the plot element
+line, = ax.plot([], [], [], color='blue', label="Particle Trajectory")
 
-ax.scatter([0],[0], [0], color='red')
-
-ax.set_ylim(-100, 100)
+# Set axis labels
+ax.set_xlabel('X Position [Earth Radii]')
+ax.set_ylabel('Y Position [Earth Radii]')
+ax.set_zlabel('Z Position [Earth Radii]')
+ax.set_title('3D Particle Trajectory')
 ax.set_xlim(-100, 100)
+ax.set_ylim(-100, 100)
 ax.set_zlim(-100, 100)
+ax.scatter([0], [0], [0], color="green")
+# Initialize the plot
+def init():
+    line.set_data([], [])
+    line.set_3d_properties([])
+    return line,
+
+# Update function for animation
+def update(i):
+    # Instead of using set_3d_properties, update 3D data here
+    line.set_data(x[:i], y[:i])
+    line.set_3d_properties(z[:i])
+    return line,
+
+# Create the animation without 'blit=True'
+ani = FuncAnimation(fig, update, frames=Nsteps, init_func=init, interval=dt)
+
+plt.legend()
 plt.show()

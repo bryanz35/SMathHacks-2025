@@ -86,9 +86,9 @@ px = [r[0] for r in rp]
 py = [r[0] for r in rp]
 pz = [r[0] for r in rp]
 pos = np.array([pos])
-x_vals = [p[0][0] for p in pos[0]]
-y_vals = [p[0][1] for p in pos[0]]
-z_vals = [p[0][2] for p in pos[0]]
+x_vals = [p[0][0] for p in pos[0]][:1000]
+y_vals = [p[0][1] for p in pos[0]][:1000]
+z_vals = [p[0][2] for p in pos[0]][:1000]
 fig = plt.figure()
 ax = plt.axes(projection="3d")
 ax.plot(px, py, pz, label='Orbit')
